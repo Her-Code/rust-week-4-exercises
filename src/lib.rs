@@ -136,9 +136,8 @@ pub fn parse_cli_args(args: &[String]) -> Result<CliCommand, BitcoinError> {
                     "Send command requires amount and address".to_string(),
                 ));
             }
-            let amount = u64::from_str(&args[1]).map_err(|e| {
-                BitcoinError::ParseError(format!("Invalid amount: {}", e))
-            })?;
+            let amount = u64::from_str(&args[1])
+                .map_err(|e| BitcoinError::ParseError(format!("Invalid amount: {}", e)))?;
             Ok(CliCommand::Send {
                 amount,
                 address: args[2].clone(),
@@ -169,7 +168,7 @@ impl TryFrom<&[u8]> for LegacyTransaction {
         let version = i32::from_le_bytes([data[0], data[1], data[2], data[3]]);
         let inputs_count = u32::from_le_bytes([data[4], data[5], data[6], data[7]]);
         let outputs_count = u32::from_le_bytes([data[8], data[9], data[10], data[11]]);
-        
+
         // For simplicity, we'll just create an empty transaction with the counts
         // In a real implementation, you would parse the actual inputs and outputs
         Ok(LegacyTransaction {
